@@ -1,0 +1,20 @@
+---
+- name: Linux Say Hello Several Times
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Ping
+      ansible.builtin.ping:
+
+    - name: Say hello with debug
+      ansible.builtin.debug:
+        msg: Hello!
+        
+    - name: Say hello with a command
+      ansible.builtin.command: echo "hello"
+
+    - name: Say hello with a shell
+      ansible.builtin.shell: echo "hello"
+
+    - name: Say hello with RAW
+      ansible.builtin.raw: echo "hello"
