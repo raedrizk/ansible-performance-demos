@@ -1,2 +1,2 @@
 ---
-packages: "{{ packages_choice.split('\n') | default('nano') }}"
+packages: "{{ packages_choice.split('\n') if packages_choice is defined | default('nano') }}"
