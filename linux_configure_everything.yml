@@ -6,7 +6,7 @@
   roles:
     - rsoliman.performance_demos.linux_dnf_install_packages
     - rsoliman.performance_demos.linux_apply_common_config
-    - rsoliman.performance_demos.linux_get_public_ip
+    - rsoliman.performance_demos.linux_get_publicip
     - rsoliman.performance_demos.linux_generate_packages_report
   tasks:
     - name: Install and configure Fluentd
