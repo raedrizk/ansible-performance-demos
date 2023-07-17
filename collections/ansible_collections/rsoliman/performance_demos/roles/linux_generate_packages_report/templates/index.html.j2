@@ -1,0 +1,108 @@
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>RPM lifecycle Package Compliance Report</title>
+      <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+      <link rel="stylesheet" href="css/main.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>  
+	  <script type="text/javascript">  
+	    $(document).ready(function () {  
+	            $('tr.parent')  
+	                .css("cursor", "pointer")  
+	                .attr("title", "Click to expand/collapse")  
+	                .click(function () {  
+	                    $(this).siblings('.child-' + this.id).toggle();  
+	                });  
+	            $('tr[@class^=child-]').hide().children('td');  
+	    });  
+	    </script>  
+   </head>
+
+
+<body>
+    <div class="wrapper">
+        <header>
+          <div class="header-container">
+            <a href="https://ansible.com">
+             <center> <img class="header-logo" src="redhat-ansible-logo.svg" title="Red Hat Ansible" alt="Red Hat Ansible"/></center>
+            </a>
+          </div>
+        </header>
+<section>
+<center>
+<h1>RPM lifecycle Package Compliance Report</h1>
+</center>
+<div id="accordion">
+<table class="main_net_table" id="detail_table" style="width:70%">
+    <thead>
+        <tr>
+            <th style="width:20%">Host</th>
+            <th style="width:20%">FQDN </th>
+            <th style="width:20%">OS</th>
+            <th style="width:20%">OS Version</th>
+            <th style="width:20%">kernel</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for host in play_hosts %}
+            {% if hostvars[host].ansible_distribution is defined %}
+                <tr class="parent" id="{{ host | replace(".", "") }}" title="Click to expand/collapse" style="cursor: pointer;"> 
+                       <td>{{ host }}</td>
+                       <td>{{ hostvars[host].ansible_fqdn }}</td>
+                       <td>{{ hostvars[host].ansible_distribution }}</td>
+                       <td>{{ hostvars[host].ansible_distribution_version }}</td>
+                       <td>{{ hostvars[host].ansible_kernel }}</td>
+                </tr>
+                {% if hostvars[host].installed_result.results is defined and hostvars[host].installed_result.results|length > 0  %}
+                    <tr class="child-{{ host | replace(".", "") }}" style="display: table-row;">
+                    <td></td>
+                    <td style="text-align: left;"><strong>Package</strong></td>
+                    <td style="text-align: left;"><strong>installed Version</strong></td>
+                    <td style="text-align: left;"><strong>Required Version</strong></td>
+                    <td style="text-align: center;"><strong>Compliant</strong></td>
+                    </tr>
+                    {% for package in hostvars[host].installed_result.results %}
+                            {% if package.name in packages | community.general.json_query('[*].\"name\"')  %}
+                                <tr class="child-{{ host | replace(".", "") }}" style="display: table-row;">
+                                <td></td>
+                                <td>{{ package.name }}</td>
+                                <td>{{ package.version }}</td>
+                                {% set query = '[?(\"name\"== \'' ~ package.name ~ '\')].\"version\" | [0]' %}
+                                {% set version = packages | community.general.json_query(query) %}
+                                <td>{{ version }}</td>
+                                {% if package.version == version  %}
+                                    <td style="text-align: center; vertical-align: middle;"> <img src="compliant.png" title="Compliant" alt="Compliant" width="20" height="20" /> </td>
+                                {% else %}
+                                    <td style="text-align: center; vertical-align: middle;"> <img src="noncompliant.png" title="Non Compliant" alt="Non Compliant" width="20" height="20" /> </td>
+                                {% endif %}
+                                 </tr>
+                            {% elif untracked | bool %}
+                                    
+                                    <tr class="child-{{ host | replace(".", "") }}" style="display: table-row;">
+                                    <td></td>
+                                    <td>{{ package.name }}</td>
+                                    <td>{{ package.version }}</td>
+                                    <td>NA</td>
+                                    <td style="text-align: center; vertical-align: middle;"><img src="na.png" title="NA" alt="NA" width="20" height="20" /></td>
+                                    </tr>
+                                
+                            {% endif %}                   
+                    {% endfor %}
+                {% endif %}  
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<center><img src="webpage_logo.png" width="300" alt="red hat ansible automation platform logo"></center>
+<br>
+</section>
+</div>
+</body>
+<footer>
+<center><a href="https://www.flaticon.com/free-icons/question" title="question icons">Question icons created by Freepik - Flaticon</a></center>
+<center><a href="https://www.flaticon.com/free-icons/correct" title="correct icons">Correct icons created by Pixel perfect - Flaticon</a></center>
+<center><a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by Pixel perfect - Flaticon</a></center>
+
+</footer>
+</html>

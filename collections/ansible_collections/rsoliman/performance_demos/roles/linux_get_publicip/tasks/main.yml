@@ -1,0 +1,13 @@
+---
+- name: Get my public IP
+  community.general.ipify_facts:
+  register: publicip
+
+- name: Setting public IP fact
+  ansible.builtin.set_fact:
+    public_ip: "{{ ansible_facts['ipify_public_ip'] }}"
+
+- name: Setting public IP stat
+  ansible.builtin.set_stats:
+    data:
+      public_ip: "{{ ansible_facts['ipify_public_ip'] }}"

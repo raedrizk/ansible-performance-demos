@@ -1,0 +1,27 @@
+---
+- name: Install or update Apache
+  ansible.builtin.yum:
+    name: httpd
+    state: latest
+
+- name: Start and enable Apache
+  ansible.builtin.service:
+    name: httpd
+    enabled: true
+    state: started
+
+- name: Get a list of all installed packages
+  ansible.builtin.yum:
+    list: installed
+  become: true
+  register: installed_result
+
+- name: Use template to Generate report of packages and their compliance
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+
+- name: Use template to Generate report of packages and their compliance
+  copy:
+    src: report/
+    dest: /var/www/html/

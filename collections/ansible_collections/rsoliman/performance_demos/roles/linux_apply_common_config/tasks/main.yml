@@ -1,0 +1,5 @@
+---
+# tasks file for linux-apply-common-config
+
+- name: Apply Common Configuration to Hosts
+  include_tasks: linux_apply_common_config.yml
