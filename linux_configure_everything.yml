@@ -9,10 +9,14 @@
     - rsoliman.performance_demos.linux_get_publicip
     - rsoliman.performance_demos.linux_generate_packages_report
   tasks:
-    - name: Install and configure Fluentd
+    - name: Config sysctl
       ansible.builtin.include_role:
-        name: geerlingguy.fluentd
+        name: rsoliman.performance_demos.linux_config_sysctl
 
-    - name: Install and configure Kibana
+    - name: Set MOTD
       ansible.builtin.include_role:
-        name: geerlingguy.kibana
+        name: rsoliman.performance_demos.linux_set_motd
+
+    - name: Run post init Script
+      ansible.builtin.include_role:
+        name: rsoliman.performance_demos.linux_run_script

@@ -1,0 +1,14 @@
+---
+- name: Run the {{ script_name }} script and create a file when run
+  ansible.builtin.script: "{{ script_name }} {{ script_args }}"
+  args:
+    creates: /tmp/{{ script_name }}.run
+  register: script_output
+
+- name: Print the script return code
+  ansible.builtin.debug:
+    msg: script execution finished with RC {{ script_output.rc }}
+
+- name: Print the script output
+  ansible.builtin.debug:
+    var: script_output.stdout

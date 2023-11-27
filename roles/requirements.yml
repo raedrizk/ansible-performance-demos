@@ -1,6 +1,0 @@
----
-roles:
-- name: geerlingguy.fluentd
-  source: https://galaxy.ansible.com
-- name: geerlingguy.kibana
-  source: https://galaxy.ansible.com

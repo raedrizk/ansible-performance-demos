@@ -1,0 +1,24 @@
+---
+# Set vm.swappiness to 5 in /etc/sysctl.conf
+- name: Set vm.swappiness to 5 in
+  ansible.posix.sysctl:
+    name: vm.swappiness
+    value: '5'
+    state: present
+
+# Set kernel.panic to 3 in /tmp/test_sysctl.conf
+- name: Set kernel.panic to 3
+  ansible.posix.sysctl:
+    name: kernel.panic
+    value: '3'
+    sysctl_file: /tmp/test_sysctl.conf
+    reload: false
+
+# Set ip forwarding on in /proc and in the sysctl file and reload if necessary
+- name: Set ip forwarding on in /proc and in the sysctl file and reload if necessary
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+    state: present
+    reload: true
