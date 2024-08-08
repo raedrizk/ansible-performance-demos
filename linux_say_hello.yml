@@ -2,6 +2,8 @@
 - name: Linux Say Hello Several Times
   hosts: all
   gather_facts: true
+  environment:
+    ANSIBLE_STDOUT_CALLBACK: ansible.posix.debug
   tasks:
     - name: Ping
       ansible.builtin.ping:
